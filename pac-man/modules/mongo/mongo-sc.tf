@@ -7,11 +7,13 @@ resource "kubernetes_storage_class" "mongo_sc" {
     }
   }
   
-  storage_provisioner = "kubernetes.io/aws-ebs"
+  storage_provisioner = "kubernetes.io/azure-disk"
   reclaim_policy      = "Retain"
   parameters = {
-    fsType = "ext4"
-    type = "gp2"
+    storageaccounttype = "Premium_LRS"
+    kind              = "Managed"
+    cachingmode       = "ReadWrite"
+    replicationtype   = "ZoneRedundant"
   }
 }
 

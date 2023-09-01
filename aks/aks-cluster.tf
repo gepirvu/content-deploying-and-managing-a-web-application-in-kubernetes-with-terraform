@@ -1,26 +1,30 @@
 provider "azurerm" {
+  subscription_id = "..."
+  client_id       = var.appId
+  client_secret   = var.password
+  tenant_id       = "..."
   features {}
-  skip_provider_registration = true
+  skip_provider_registration = "true"
 }
 
 ## Import Resource Group Before Apply ##
-resource "azurerm_resource_group" "guru" {
-  name     = "1-83bd4599-playground-sandbox"
-  location = "centralus"
+resource "azurerm_resource_group" "kube_rg" {
+  name     = "gp_kubernetes"
+  location = "westeu"
 
   tags = {
     environment = "Demo"
   }
 }
 
-resource "azurerm_kubernetes_cluster" "guru" {
-  name                = "guru-aks"
-  location            = azurerm_resource_group.guru.location
-  resource_group_name = azurerm_resource_group.guru.name
-  dns_prefix          = "guru-k8s"
+resource "azurerm_kubernetes_cluster" "kube_cluster" {
+  name                = "gp-k8s"
+  location            = azurerm_resource_group.kube_rg.location
+  resource_group_name = azurerm_resource_group.kube_rg.name
+  dns_prefix          = "gp-k8s"
 
   default_node_pool {
-    name            = "guru"
+    name            = "gp-k8s-nodepool"
     node_count      = 2
     vm_size         = "Standard_B2s"
     os_disk_size_gb = 30
